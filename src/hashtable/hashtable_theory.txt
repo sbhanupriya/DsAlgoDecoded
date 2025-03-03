@@ -1,0 +1,55 @@
+HashTable
+pair of (key,value) with constant insertion, deletion & lookup time.
+building block for language run time -> variable lookup tables, class and its members
+
+Two ideas to construct
+1. Map application key to hash key [0,N]  ->  "apple" to 127839933
+2. Hash key to a smaller range [0,m]  -> 127839933 to 3
+
+Hash Keys have a larger range [0, 2^32]
+Hash Function converts object to this int range -> "apple" ----hash function---> 127839933
+
+Naive Implementation
+Use Arrays, Store Value at int(i) given by hash function f(key). It works well for small N only.
+Limitation -> large memory required, memory wastage so better to map to smaller range
+
+Storing k keys in hash table, we have an array of size m = O(k)
+Second step comes here reduces Hash Key from large range to smaller value
+[0,N] --> [0,m]
+
+Adding new keys to hashtable
+array is resized to double size i.e 2*m
+no change in hash function required as hash function outputs to large N
+
+key1 -> hash func -> hash1
+key2 -> hash func -> hash1  --> Multiple keys produce same hash key upon hashing i.e Collission
+
+How to store multiple keys in same slot?
+1. Chaining -> We store colliding keys in auxillary data structure like LinkedList
+2. Open Addressing
+
+Chaining with LinkedList
+Core set of operations needed
+1. Adding new key to linkedList
+2. Check if key is present or not
+3. Remove a key from list
+
+Using simple Single LinkedList
+Array of LinkedLists -> each slot container pointer to head of linked list
+Each node of linked lists contains pointer to key, pointer to next node
+Possible implementations -> start of linked list, end of linked list, happen as per sort order
+Lookups are hard if collision are more, they result to linear scan
+
+Better approach - use self-balancing binary tree as auxilary data structure
+insertion log(n), lookup log(n), deletion log(n)
+When high collision rates and we cannot expand the array, we use self-balancing array
+
+Conflict Resolution using Open Addressing
+When keys collide find a way to hunt for available slot in the array deterministically
+Probing - finding the next avaiable slot
+j = p(k,i) -> gives the new index where key k can be placed in attempt of i
+Good probing func -> generates permuatation of numbers [0,m-1]  to cover entire space eventually.
+Cases on lookup -> find the key, get an empty slot, exhaust iterating over all slots
+Deletion has to be soft delete.
+Limitation of open addressing is max number of keys = # of slots in array
+
